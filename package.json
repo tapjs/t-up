@@ -1,0 +1,18 @@
+{
+  "name": "t-up",
+  "version": "0.0.1",
+  "description": "Tee up a test server in one file, tear it down in another",
+  "main": "tup.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isaacs/t-up.git"
+  },
+  "author": "Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)",
+  "license": "ISC",
+  "devDependencies": {
+    "tap": "^5.6.0"
+  },
+  "scripts": {
+    "test": "tap test/*.js"
+  }
+}
