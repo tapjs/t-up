@@ -87,7 +87,7 @@ tup.close()
   module will output some TAP notes about how it's going.
 - Definitely clean up after yourself!  If you don't ever call
   `tup.close()`, then you'll have a bunch of node processes lying
-  arouhnd.
+  around.
 - The server MUST print something to standard output (console.log or
   whatever) when it's ready to move onto the next test.  This prevents
   a race condition where the tests fail because the server isn't up
