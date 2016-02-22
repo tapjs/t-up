@@ -5,7 +5,7 @@
   "main": "tup.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/isaacs/t-up.git"
+    "url": "git+https://github.com/tapjs/t-up.git"
   },
   "author": "Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)",
   "license": "ISC",
