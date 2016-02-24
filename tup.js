@@ -14,7 +14,13 @@ function tup (fn) {
   var hash = sha(fn)
   if (process.env.T_UP_HASH === hash) {
     // already in child process, yay!
-    fn()
+    fn(function (er) {
+      if (er) {
+        throw er
+      } else {
+        console.log('\nT-UP DONE %s\n', hash)
+      }
+    })
   } else {
     child(hash)
   }
@@ -45,7 +51,7 @@ function child (hash) {
   var child = spawn(process.execPath, args, {
     env: env,
     cwd: cwd,
-    stdio: [ 'ignore', 'pipe', 'ignore' ],
+    stdio: [ 'ignore', 'pipe', 'pipe' ],
     detached: true
   })
 
@@ -53,10 +59,27 @@ function child (hash) {
 
   fs.writeSync(fd, child.pid + '\n')
 
-  child.stdout.on('data', function () {
-    t.pass('got data from child process, dropping references')
-    child.unref()
-    child.stdout.unref()
+  child.stderr.pipe(process.stderr)
+
+  var unrefed = false
+  var out = ''
+  child.stdout.on('data', function (c) {
+    out += c
+    if (out.split(/[\r\n]+/).indexOf('T-UP DONE ' + hash) !== -1) {
+      unrefed = true
+      child.unref()
+      child.stdout.unref()
+      child.stderr.unref()
+    }
+  })
+
+  child.on('exit', function (exitCode, signal) {
+    if (!unrefed) {
+      t.fail('child process exited early', {
+        exitCode: exitCode,
+        signal: signal
+      })
+    }
   })
 }
 

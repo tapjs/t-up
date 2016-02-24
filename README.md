@@ -16,7 +16,7 @@ You may have a setup file that starts a server, like so:
 // 00-setup.js
 var tup = require('t-up')
 
-tup(function (t) {
+tup(function (done) {
   var http = require('http')
   http.createServer(function (req, res) {
     if (req.url === '/ping') {
@@ -26,9 +26,9 @@ tup(function (t) {
       res.end('not found\n')
     }
   }).listen(1337, function () {
-    // t-up will wait until this process makes some kind of noise on
-    // stdout.  this is to prevent moving on before you're ready.
-    console.log('listening')
+    // standard node-style callback
+    // if you call this with an error, it'll blow up
+    done()
   })
 })
 ```
