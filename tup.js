@@ -95,7 +95,7 @@ function kill (pidfile) {
   }
 
   try {
-    process.kill(pid, 'SIGKILL')
+    process.kill(pid, 'SIGTERM')
   } catch (e) {
     if (e.code === 'ESRCH') {
       t.pass('process was not running')
@@ -114,6 +114,26 @@ function kill (pidfile) {
       rimraf.sync(piddir)
     }
   } catch (e) {}
+
+  // Give it 200ms, then make sure SIGTERM was enough
+  // on windows, SIGTERM is the same as SIGKILL
+  if (process.platform !== 'win32') {
+    setTimeout(function () {
+      var er
+      try {
+        process.kill(pid, 'SIGKILL')
+      } catch (e) {
+        er = e
+      }
+      if (!er) {
+        t.fail('exit delayed, SIGKILL was required')
+      } else if (er.code === 'ESRCH') {
+        t.pass('exited successfully with SIGTERM')
+      } else {
+        throw er
+      }
+    }, 200)
+  }
 }
 
 function close () {
