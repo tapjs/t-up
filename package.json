@@ -10,11 +10,14 @@
   "author": "Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)",
   "license": "ISC",
   "scripts": {
-    "test": "tap test/*.js --cov"
+    "test": "tap test/*.js --branches=100"
   },
   "dependencies": {
     "mkdirp": "^0.5.1",
     "rimraf": "^2.5.2",
     "tap": "^5.6.0"
+  },
+  "devDependencies": {
+    "glob": "^7.0.0"
   }
 }

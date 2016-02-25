@@ -10,20 +10,27 @@ function sha (fn) {
   return crypto.createHash('sha256').update(fn.toString()).digest('hex')
 }
 
+var called = false
 function tup (fn) {
-  var hash = sha(fn)
-  if (process.env.T_UP_HASH === hash) {
-    // already in child process, yay!
-    fn(function (er) {
-      if (er) {
-        throw er
-      } else {
-        console.log('\nT-UP DONE %s\n', hash)
-      }
-    })
-  } else {
-    child(hash)
+  if (called) {
+    throw new Error('You may only use t-up once per process')
   }
+  called = true
+  process.nextTick(function () {
+    var hash = sha(fn)
+    if (process.env.T_UP_HASH === hash) {
+      // already in child process, yay!
+      fn(function (er) {
+        if (er) {
+          throw er
+        } else {
+          console.log('\nT-UP DONE %s\n', hash)
+        }
+      })
+    } else {
+      child(hash)
+    }
+  })
 }
 
 function child (hash) {
@@ -74,6 +81,9 @@ function child (hash) {
   })
 
   child.on('exit', function (exitCode, signal) {
+    // almost certainly won't get an 'exit' event if we've already
+    // unrefed the child, but avoid a false failure anyway.
+    /* istanbul ignore else */
     if (!unrefed) {
       t.fail('child process exited early', {
         exitCode: exitCode,
@@ -97,6 +107,9 @@ function kill (pidfile) {
   try {
     process.kill(pid, 'SIGTERM')
   } catch (e) {
+    // very unlikely to get some error other than ESRCH, but if so,
+    // go ahead and blow up.
+    /* istanbul ignore else */
     if (e.code === 'ESRCH') {
       t.pass('process was not running')
     } else {
@@ -117,6 +130,7 @@ function kill (pidfile) {
 
   // Give it 200ms, then make sure SIGTERM was enough
   // on windows, SIGTERM is the same as SIGKILL
+  /* istanbul ignore else */
   if (process.platform !== 'win32') {
     setTimeout(function () {
       var er
@@ -127,10 +141,15 @@ function kill (pidfile) {
       }
       if (!er) {
         t.fail('exit delayed, SIGKILL was required')
-      } else if (er.code === 'ESRCH') {
-        t.pass('exited successfully with SIGTERM')
       } else {
-        throw er
+        // very unlikely to get some error other than ESRCH, but if so,
+        // go ahead and blow up.
+        /* istanbul ignore else */
+        if (er.code === 'ESRCH') {
+          t.pass('exited successfully with SIGTERM')
+        } else {
+          throw er
+        }
       }
     }, 200)
   }
