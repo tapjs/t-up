@@ -15,7 +15,7 @@
   "dependencies": {
     "mkdirp": "^0.5.1",
     "rimraf": "^2.5.2",
-    "tap": "^5.6.0"
+    "tap": "^7.0.0"
   },
   "devDependencies": {
     "glob": "^7.0.0"
