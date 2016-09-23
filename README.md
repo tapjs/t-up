@@ -88,8 +88,8 @@ tup.close()
 - Definitely clean up after yourself!  If you don't ever call
   `tup.close()`, then you'll have a bunch of node processes lying
   around.
-- The server MUST print something to standard output (console.log or
-  whatever) when it's ready to move onto the next test.  This prevents
-  a race condition where the tests fail because the server isn't up
-  yet.  Otherwise, all stdio is completely lost, because the child
-  process is abandoned without access to that stuff.
+- The server MUST call the `done()` function when it's ready to move
+  onto the next test.  This writes a special key to standard output,
+  and prevents a race condition where the tests fail because the
+  server isn't up yet.  Otherwise, all stdio is completely lost,
+  because the child process is abandoned without access to that stuff.
