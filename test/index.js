@@ -10,8 +10,7 @@ t.test('basic success case', function (t) {
     },
     count: 4,
     pass: 4,
-    ok: true,
-    time: Number
+    ok: true
   })
 })
 
@@ -23,8 +22,7 @@ t.test('env with a pre-existing T_UP_HASH', function (t) {
     },
     count: 4,
     pass: 4,
-    ok: true,
-    time: Number
+    ok: true
   })
 })
 
@@ -37,8 +35,7 @@ t.test('ignore SIGTERM case', function (t) {
     count: 4,
     pass: 3,
     ok: false,
-    fail: 1,
-    time: Number
+    fail: 1
   })
 })
 
@@ -51,8 +48,7 @@ t.test('exit early', function (t) {
     count: 4,
     pass: 1,
     ok: false,
-    fail: 3,
-    time: Number
+    fail: 3
   })
 })
 
@@ -66,8 +62,7 @@ t.test('two things', function (t) {
       count: 4,
       pass: 1,
       ok: false,
-      fail: 3,
-      time: Number
+      fail: 3
     })
   })
   t.test('two processes', function (t) {
@@ -78,8 +73,7 @@ t.test('two things', function (t) {
       },
       count: 5,
       pass: 5,
-      ok: true,
-      time: Number
+      ok: true
     })
   })
   t.end()
@@ -94,8 +88,7 @@ t.test('callback error', function (t) {
     count: 4,
     pass: 1,
     ok: false,
-    fail: 3,
-    time: Number
+    fail: 3
   })
 })
 
