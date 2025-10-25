@@ -8,7 +8,7 @@
     "url": "git+https://github.com/tapjs/t-up.git"
   },
   "author": "Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)",
-  "license": "ISC",
+  "license": "BlueOak-1.0.0",
   "scripts": {
     "test": "tap --100 test/*.js",
     "preversion": "npm test",
